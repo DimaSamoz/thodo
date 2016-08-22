@@ -1,0 +1,45 @@
+-- Dima's To Do List --
+--    22 Aug 2016    --
+
+TODAY
+  ✔ 1.  Print flight tickets
+    2.  Call Richard
+  ✔ 3.  Do laundry
+
+TOMORROW
+    1.  Email Tom
+    2.  Shopping
+        * Bread
+        * Milk
+        * Toothpaste
+
+OVERDUE
+    1.  Update OS - Friday 16 Sep
+____
+
+THIS WEEK
+  ✔ 1.  Fix bike
+
+NEXT WEEK
+    1.  Barcelona flight - Saturday 24 Sep, 14.30
+    2.  Go to IKEA
+    3.  Order camera
+____
+
+THIS MONTH
+    1.  Barcelona return - 29 Thursday 18.40
+    2.  Book dentist appointment
+    3.  Visit Liv
+
+NEXT MONTH
+    Nothing yet.
+____
+
+GENERAL
+    1.  Movies to watch
+      ✔ * Deadpool
+        * Ghostbusters
+    2.  Project ideas
+      ✔ * Mastermind
+        * To-do app
+        * Game of Life
