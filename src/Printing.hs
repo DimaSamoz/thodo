@@ -1,0 +1,114 @@
+-- | Functions to print list components and convert them to strings.
+module Printing
+    ( showItem
+    , showTask
+    , showGroup
+    , showBlock
+    , showTodoList
+    , printStrings
+    ) where
+
+import Types
+import Data.Time
+import Data.List (sort, sortBy, intersperse, intercalate)
+import Data.Char (toUpper)
+
+
+spaces :: Int -> String
+spaces num = replicate num ' '
+
+tick :: String
+tick = "  ✔ "
+
+separator :: String
+separator = "____"
+
+padIndex :: Int -> String
+padIndex index
+    | index < 10  = show index ++ ".  "
+    | otherwise   = show index ++ ". "
+
+showItem :: (Char, Item) -> String
+showItem (index, item)
+    | itemDone item = concat [spaces 4, tick, index : ") ", itemDesc item]
+    | otherwise     = concat [spaces 8, index : ") ", itemDesc item]
+
+showTaskHeader :: Int -> Task -> String
+showTaskHeader index task
+    | done task = concat [tick, padIndex index, desc task]
+    | otherwise = concat [spaces 4, padIndex index, desc task]
+
+-- | Converts a task into a string list.
+showTask :: (Int, Task) -> [String]
+showTask (index, task) = showTaskHeader index task : map showItem indexedItems
+    where indexedItems = zip ['a'..] (items task)
+
+showGroupHeader :: TaskGroup -> String
+showGroupHeader (TaskGroup (Custom str) _) = map toUpper str
+showGroupHeader (TaskGroup time _) = map toUpper $ show time
+
+-- | Converts a task group into a string list.
+showGroup :: TaskGroup -> [String]
+showGroup group = showGroupHeader group : concatMap showTask indexedTasks
+    where indexedTasks = zip [1..] (sortBy (flip compare) $ tasks group)
+
+-- | Converts a group block into a string list.
+showBlock :: GroupBlock -> [String]
+showBlock block = intercalate ["\n"] $ map showGroup sortedGroups
+    where sortedGroups = sort $ groups block
+
+showListHeader :: TodoList -> [String]
+showListHeader (TodoList (name, date) _) = ["", spaces 4 ++ title, spaces (4 + centOffset) ++ dateString,""]
+    where title = name ++ "'s To Do List"
+          dateString = formatTime defaultTimeLocale "%e %b %G" date
+          centOffset = (length title - length dateString) `div` 2
+
+-- | Converts a to do list into a string list
+showTodoList :: TodoList -> [String]
+showTodoList list = showListHeader list ++ intercalate [separator ++ "\n"] (map showBlock sortedBlocks)
+    where sortedBlocks = sort $ blocks list
+
+exItems :: [Item]
+exItems =
+    [ Item "Bread" False
+    , Item "Milk" True
+    , Item "Toothpaste" False
+    ]
+
+exTask :: Task
+exTask = Task "Grocery shopping" exItems (Rel Today) Medium True
+
+exGroup :: TaskGroup
+exGroup = TaskGroup (RelTime Today)
+    [ Task "Do laundry" [] (Rel Today) Low False
+    , Task "Call Simon" [] (Rel Today) High False
+    , exTask
+    ]
+
+exBlock :: GroupBlock
+exBlock = GroupBlock Days
+    [ exGroup
+    , TaskGroup (RelTime Tomorrow)
+        [ Task "Hi" [] (Rel Tomorrow) High True
+        , Task "Email" [] (Rel Tomorrow) Low False
+        ]
+    ]
+
+exBlock2 :: GroupBlock
+exBlock2 = GroupBlock Weeks
+    [ TaskGroup (RelTime NextWeek)
+        [ Task "Eat"
+            [ Item "Blabla" True
+            , Item "Wibble" False
+            ] (Rel NextWeek) Medium False
+        ]
+    ]
+
+exList :: TodoList
+exList = TodoList ("Dima", fromGregorian 2016 8 23)
+    [ exBlock
+    , exBlock2
+    ]
+
+printStrings :: [String] -> IO ()
+printStrings = mapM_ putStrLn
