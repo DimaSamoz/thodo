@@ -1,5 +1,6 @@
--- Dima's To Do List --
---    22 Aug 2016    --
+
+    Dima's To Do List
+       17 Sep 2016
 
 TODAY
   ✔ 1.  Print flight tickets
@@ -9,9 +10,9 @@ TODAY
 TOMORROW
     1.  Email Tom
     2.  Shopping
-        * Bread
-        * Milk
-        * Toothpaste
+        a) Bread
+        b) Milk
+        c) Toothpaste
 
 OVERDUE
     1.  Update OS - Friday 16 Sep
@@ -37,9 +38,9 @@ ____
 
 GENERAL
     1.  Movies to watch
-      ✔ * Deadpool
-        * Ghostbusters
+      ✔ a) Deadpool
+        b) Ghostbusters
     2.  Project ideas
-      ✔ * Mastermind
-        * To-do app
-        * Game of Life
+      ✔ a) Mastermind
+        b) To-do app
+        c) Game of Life
