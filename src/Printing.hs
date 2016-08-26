@@ -33,10 +33,21 @@ showItem (index, item)
     | itemDone item = concat [spaces 4, tick, index : ") ", itemDesc item]
     | otherwise     = concat [spaces 8, index : ") ", itemDesc item]
 
+showPriority :: Priority -> String
+showPriority Low    = "..."
+showPriority Medium = ""
+showPriority High   = "!"
+
+showAbsDeadline :: Deadline -> String
+showAbsDeadline (Abs (Date d)) = " – " ++ formatTime defaultTimeLocale "%A %e %b %G" d
+showAbsDeadline (Abs (Time t)) = " – " ++ formatTime defaultTimeLocale "%R, %A %e %b %G" t
+showAbsDeadline _ = ""
+
 showTaskHeader :: Int -> Task -> String
 showTaskHeader index task
-    | done task = concat [tick, padIndex index, desc task]
-    | otherwise = concat [spaces 4, padIndex index, desc task]
+    | done task = concat [tick, padIndex index, text]
+    | otherwise = concat [spaces 4, padIndex index, text]
+        where text = concat [desc task, showPriority (priority task), showAbsDeadline (deadline task)]
 
 -- | Converts a task into a string list.
 showTask :: (Int, Task) -> [String]
@@ -83,6 +94,7 @@ exGroup = TaskGroup (RelTime Today)
     [ Task "Do laundry" [] (Rel Today) Low False
     , Task "Call Simon" [] (Rel Today) High False
     , exTask
+    , Task "Print tickets" [] (Abs $ Date (fromGregorian 2016 09 24)) High False
     ]
 
 exBlock :: GroupBlock
