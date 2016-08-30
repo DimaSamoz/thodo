@@ -34,9 +34,9 @@ showItem (index, item)
     | otherwise     = concat [spaces 8, index : ") ", itemDesc item]
 
 showPriority :: Priority -> String
-showPriority Low    = "..."
-showPriority Medium = ""
-showPriority High   = "!"
+showPriority Low    = "...  "
+showPriority Medium = "  "
+showPriority High   = "!  "
 
 showAbsDeadline :: Deadline -> String
 showAbsDeadline (Abs (Date d)) = " – " ++ formatTime defaultTimeLocale "%A %e %b %G" d
@@ -65,7 +65,7 @@ showGroup group = showGroupHeader group : concatMap showTask indexedTasks
 
 -- | Converts a group block into a string list.
 showBlock :: GroupBlock -> [String]
-showBlock block = intercalate ["\n"] $ map showGroup sortedGroups
+showBlock block = intercalate [""] $ map showGroup sortedGroups
     where sortedGroups = sort $ groups block
 
 showListHeader :: TodoList -> [String]
@@ -74,7 +74,7 @@ showListHeader (TodoList (name, date) _) = ["", spaces 4 ++ title, spaces (4 + c
           dateString = formatTime defaultTimeLocale "%e %b %G" date
           centOffset = (length title - length dateString) `div` 2
 
--- | Converts a to do list into a string list
+-- | Converts a to do list into a string list.
 showTodoList :: TodoList -> [String]
 showTodoList list = showListHeader list ++ intercalate [separator ++ "\n"] (map showBlock sortedBlocks)
     where sortedBlocks = sort $ blocks list
@@ -94,7 +94,9 @@ exGroup = TaskGroup (RelTime Today)
     [ Task "Do laundry" [] (Rel Today) Low False
     , Task "Call Simon" [] (Rel Today) High False
     , exTask
-    , Task "Print tickets" [] (Abs $ Date (fromGregorian 2016 09 24)) High False
+    , Task "Print tickets" [] (Abs $ Date (fromGregorian 2016 9 24)) High False
+    , Task "Do important stuff" [] (Abs $ Time (UTCTime (fromGregorian 2005 3 5) (timeOfDayToTime $ dayFractionToTimeOfDay 0.76))) High False
+
     ]
 
 exBlock :: GroupBlock
