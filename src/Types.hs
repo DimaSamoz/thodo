@@ -17,7 +17,7 @@ module Types
 import Data.Time
 
 -- | The priority of the task.
-data Priority = Low | Medium | High deriving (Eq, Show, Ord)
+data Priority = Low | Normal | High deriving (Eq, Show, Ord)
 
 -- | The deadline of the task.
 data Deadline = None | Rel RelativeTime | Abs AbsoluteTime deriving (Eq, Show)

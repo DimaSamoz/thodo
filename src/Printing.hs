@@ -38,7 +38,7 @@ showItem (index, item)
 
 showPriority :: Priority -> String
 showPriority Low    = "...  "
-showPriority Medium = "  "
+showPriority Normal = "  "
 showPriority High   = "!  "
 
 showAbsDeadline :: Deadline -> String
@@ -63,7 +63,7 @@ showGroupHeader (TaskGroup time _) = map toUpper $ show time
 
 -- | Converts a task group into a string list.
 showGroup :: TaskGroup -> [String]
-showGroup group 
+showGroup group
     | null (tasks group) = showGroupHeader group : [noTasks]
     | otherwise          = showGroupHeader group : concatMap showTask indexedTasks
         where indexedTasks = zip [1..] (sortBy (flip compare) $ tasks group)
@@ -92,7 +92,7 @@ exItems =
     ]
 
 exTask :: Task
-exTask = Task "Grocery shopping" exItems (Rel Today) Medium True
+exTask = Task "Grocery shopping" exItems (Rel Today) Normal True
 
 exGroup :: TaskGroup
 exGroup = TaskGroup (RelTime Today)
@@ -120,7 +120,7 @@ exBlock2 = GroupBlock Weeks
         [ Task "Eat"
             [ Item "Blabla" True
             , Item "Wibble" False
-            ] (Rel NextWeek) Medium False
+            ] (Rel NextWeek) Normal False
         ]
     ]
 

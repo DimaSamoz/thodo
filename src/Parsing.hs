@@ -49,14 +49,14 @@ parseTaskDescDate = do
 -- Parses the priority token that describes the priority of the task.
 priorityToken :: Parsec String () Priority
 priorityToken = do
-    -- The trailing spaces for undated tasks might be removed, so we need to account for that possibility 
+    -- The trailing spaces for undated tasks might be removed, so we need to account for that possibility
     token <- try (string "!  ")     <|> string "!"
          <|> try (string "...  ")   <|> string "..."
          <|> try (string "  ")      <|> lookAhead (string "\n") -- We need to match the empty string at the end of the line, without consuming the newline
-    case head token of 
+    case head token of
         '!' -> return High
-        '\n' -> return Medium
-        ' '  -> return Medium
+        '\n' -> return Normal
+        ' '  -> return Normal
         '.'  -> return Low
 
 -- Parses the whole task description.
@@ -66,7 +66,7 @@ parseTaskDesc =
     (,,) <$> anyChar `manyTill` lookAhead priorityToken -- We don't want to consume the token, only look ahead
          <*> priorityToken
          <*> parseTaskDescDate
-         
+
 -- Parses the entire task header.
 parseTaskHeader :: Parsec String () Task
 parseTaskHeader = do
