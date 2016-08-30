@@ -91,6 +91,11 @@ parseTask relTime = do
         then return header {items = taskItems, deadline = relTime}
         else return header {items = taskItems}
 
+tryNoTasks :: Parsec String () Bool
+tryNoTasks = do
+    notasks <- try (string "    Nothing yet.\n") <|> string ""
+    return $ notasks /= ""
+
 -- Parses the group category.
 parseCategory :: Parsec String () Category
 parseCategory = do
@@ -109,9 +114,12 @@ parseCategory = do
 parseGroup :: Parsec String () TaskGroup
 parseGroup = do
     category <- parseCategory
-    tasks <- case category of
-            RelTime rt  -> many $ try (parseTask (Rel rt))
-            Custom _    -> many $ try (parseTask None)
+    notasks <- tryNoTasks
+    tasks <- if notasks
+            then return []
+            else case category of
+                RelTime rt  -> many $ try (parseTask (Rel rt))
+                Custom _    -> many $ try (parseTask None)
     return TaskGroup {category = category, tasks = tasks}
 
 blockSep :: Parsec String () ()

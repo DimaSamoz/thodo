@@ -23,6 +23,9 @@ tick = "  ✔ "
 separator :: String
 separator = "____"
 
+noTasks :: String
+noTasks = "    Nothing yet."
+
 padIndex :: Int -> String
 padIndex index
     | index < 10  = show index ++ ".  "
@@ -60,8 +63,10 @@ showGroupHeader (TaskGroup time _) = map toUpper $ show time
 
 -- | Converts a task group into a string list.
 showGroup :: TaskGroup -> [String]
-showGroup group = showGroupHeader group : concatMap showTask indexedTasks
-    where indexedTasks = zip [1..] (sortBy (flip compare) $ tasks group)
+showGroup group 
+    | null (tasks group) = showGroupHeader group : [noTasks]
+    | otherwise          = showGroupHeader group : concatMap showTask indexedTasks
+        where indexedTasks = zip [1..] (sortBy (flip compare) $ tasks group)
 
 -- | Converts a group block into a string list.
 showBlock :: GroupBlock -> [String]
@@ -110,7 +115,8 @@ exBlock = GroupBlock Days
 
 exBlock2 :: GroupBlock
 exBlock2 = GroupBlock Weeks
-    [ TaskGroup (RelTime NextWeek)
+    [ TaskGroup (RelTime ThisWeek) []
+    , TaskGroup (RelTime NextWeek)
         [ Task "Eat"
             [ Item "Blabla" True
             , Item "Wibble" False
