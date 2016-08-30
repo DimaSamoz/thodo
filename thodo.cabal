@@ -24,3 +24,4 @@ executable thodo
                      , optparse-applicative
                      , parsec
                      , transformers
+                     , pretty-show
