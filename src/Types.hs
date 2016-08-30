@@ -53,12 +53,13 @@ instance Ord Category where
     compare (RelTime t1) (RelTime t2) = compare t1 t2
     compare (Custom st1) (Custom st2) = compare st1 st2
     compare (RelTime _) (Custom _) = GT
+    compare (Custom _) (RelTime _) = LT
 
 -- | The absolute deadline of the task.
 data AbsoluteTime = Date Day | Time UTCTime deriving (Eq, Show)
 
 -- | The timescale of the deadline, e.g. today//tomorrow or this month//next month.
-data Timescale = Days | Weeks | Months | Other String deriving (Eq, Show, Ord)
+data Timescale = Days | Weeks | Months | Other deriving (Eq, Show, Ord)
 
 -- | Whether the task or item is done or not.
 type Done = Bool
@@ -101,4 +102,4 @@ instance Ord GroupBlock where
     compare block1 block2 = scale block1 `compare` scale block2
 
 -- | An entire to do list with a header containing the name and date, and the list of the blocks in the list.
-data TodoList = TodoList { header :: (String, Day), blocks :: [GroupBlock]}
+data TodoList = TodoList { header :: (String, Day), blocks :: [GroupBlock]} deriving (Eq, Show)
