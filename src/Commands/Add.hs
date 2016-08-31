@@ -1,7 +1,7 @@
 -- | Subparsers for the 'add' command.
 module Commands.Add
     ( parseTask
-    , parseCategory
+    , parseAddCategory
     , parsePriority
     , parseAddItems
     , parseDayOfWeek
@@ -12,8 +12,9 @@ module Commands.Add
     , DayOfWeek
     ) where
 
-import Options.Applicative
 import Types
+import Commands.Common
+import Options.Applicative
 import Data.Time hiding (parseTime)
 
 -- | The string describing the task.
@@ -29,54 +30,9 @@ data DayOfWeek = Mon | Tue | Wed | Thu | Fri | Sat | Sun deriving (Eq, Show, Rea
 parseTask :: Parser TodoTask
 parseTask = strArgument (metavar "TODO-TASK")
 
--- Category parsers
-
-today :: Parser Category
-today = flag' (RelTime Today)
-     ( long "today"
-    <> short 't'
-    <> help "Tasks from today")
-
-tomorrow :: Parser Category
-tomorrow = flag' (RelTime Tomorrow)
-     ( long "tomorrow"
-    <> short 'T'
-    <> help "Tasks from tomorrow")
-
-thisWeek :: Parser Category
-thisWeek = flag' (RelTime ThisWeek)
-     ( long "this-week"
-    <> short 'w'
-    <> help "Tasks from later this week")
-
-nextWeek :: Parser Category
-nextWeek = flag' (RelTime NextWeek)
-     ( long "next-week"
-    <> short 'W'
-    <> help "Tasks from next week")
-
-thisMonth :: Parser Category
-thisMonth = flag' (RelTime ThisMonth)
-     ( long "this-month"
-    <> short 'm'
-    <> help "Tasks from later this month")
-
-nextMonth :: Parser Category
-nextMonth = flag' (RelTime NextMonth)
-     ( long "next-month"
-    <> short 'M'
-    <> help "Tasks from next month")
-
-customCategory :: Parser Category
-customCategory = Custom <$> strOption
-     ( long "category"
-    <> short 'c'
-    <> metavar "CATEGORY"
-    <> help "Tasks in the category CATEGORY" )
-
 -- | Parses the category of the task.
-parseCategory :: Parser Category
-parseCategory =
+parseAddCategory :: Parser Category
+parseAddCategory =
         today
     <|> tomorrow
     <|> thisWeek
@@ -85,6 +41,7 @@ parseCategory =
     <|> nextMonth
     <|> customCategory
     <|> pure (RelTime Today)
+
 
 -- | Parses the add items flag.
 parseAddItems :: Parser AddItems
