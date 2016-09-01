@@ -5,15 +5,12 @@ import Commands.Parser
 import Commands.Common
 import Options.Applicative
 
-greet :: Command -> IO ()
-greet c = print c
-
 
 
 main :: IO ()
-main = execParser opts >>= greet
+main = execParser opts >>= handleCommand
   where
     opts = info (helper <*> parseCommand)
       ( fullDesc
-     <> progDesc "Print a greeting for TARGET"
-     <> Options.Applicative.header "hello - a test for optparse-applicative" )
+     <> progDesc "Manage tasks in a to-do list"
+     <> Options.Applicative.header "thodo - a simple command-line to-do list tool" )

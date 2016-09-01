@@ -1,5 +1,6 @@
 module Commands.Parser
     ( parseCommand
+    , handleCommand
     ) where
 
 import Options.Applicative
@@ -9,6 +10,7 @@ import Commands.Add
 import Commands.What
 import Commands.Tick
 import Commands.Clear
+import Commands.Init
 import Commands.Common
 
 
@@ -44,9 +46,8 @@ parseCommand = subparser $
     <> command "init"  (parseInit `withInfo` "Initialise a new to-do list")
 
 
--- handleCommand :: Command -> IO ()
--- handleCommand
-
+handleCommand :: Command -> IO ()
+handleCommand Init = handleInitCommand
 
 
 withInfo :: Parser a -> String -> ParserInfo a
