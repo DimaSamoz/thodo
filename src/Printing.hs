@@ -5,6 +5,7 @@ module Printing
     , showGroup
     , showBlock
     , showTodoList
+    , initTodoList
     , printStrings
     , writeToFile
     ) where
@@ -130,6 +131,24 @@ exList = TodoList ("Dima", fromGregorian 2016 8 23)
     [ exBlock
     , exBlock2
     ]
+
+-- | Creates a new, empty todo list with the given name and date.
+initTodoList :: String -> Day -> TodoList
+initTodoList name date =
+    TodoList (name, date)
+        [ GroupBlock Days
+            [ TaskGroup (RelTime Today) []
+            , TaskGroup (RelTime Tomorrow) []
+            ]
+        , GroupBlock Weeks
+            [ TaskGroup (RelTime ThisWeek) []
+            , TaskGroup (RelTime NextWeek) []
+            ]
+        , GroupBlock Months
+            [ TaskGroup (RelTime ThisMonth) []
+            , TaskGroup (RelTime NextMonth) []
+            ]
+        ]
 
 -- | Print a todo list in the console.
 printStrings :: [String] -> IO ()
