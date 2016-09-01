@@ -35,8 +35,8 @@ padIndex index
 
 showItem :: (Char, Item) -> String
 showItem (index, item)
-    | itemDone item = concat [spaces 4, tick, index : ") ", itemDesc item]
-    | otherwise     = concat [spaces 8, index : ") ", itemDesc item]
+    | _itemDone item = concat [spaces 4, tick, index : ") ", _itemDesc item]
+    | otherwise     = concat [spaces 8, index : ") ", _itemDesc item]
 
 showPriority :: Priority -> String
 showPriority Low    = "...  "
@@ -50,14 +50,14 @@ showAbsDeadline _ = ""
 
 showTaskHeader :: Int -> Task -> String
 showTaskHeader index task
-    | done task = concat [tick, padIndex index, text]
+    | _done task = concat [tick, padIndex index, text]
     | otherwise = concat [spaces 4, padIndex index, text]
-        where text = concat [desc task, showPriority (priority task), showAbsDeadline (deadline task)]
+        where text = concat [_desc task, showPriority (_priority task), showAbsDeadline (_deadline task)]
 
 -- | Converts a task into a string list.
 showTask :: (Int, Task) -> [String]
 showTask (index, task) = showTaskHeader index task : map showItem indexedItems
-    where indexedItems = zip ['a'..] (items task)
+    where indexedItems = zip ['a'..] (_items task)
 
 showGroupHeader :: TaskGroup -> String
 showGroupHeader (TaskGroup (Custom str) _) = map toUpper str
@@ -66,14 +66,14 @@ showGroupHeader (TaskGroup time _) = map toUpper $ show time
 -- | Converts a task group into a string list.
 showGroup :: TaskGroup -> [String]
 showGroup group
-    | null (tasks group) = showGroupHeader group : [noTasks]
+    | null (_tasks group) = showGroupHeader group : [noTasks]
     | otherwise          = showGroupHeader group : concatMap showTask indexedTasks
-        where indexedTasks = zip [1..] (sortBy (flip compare) $ tasks group)
+        where indexedTasks = zip [1..] (sortBy (flip compare) $ _tasks group)
 
 -- | Converts a group block into a string list.
 showBlock :: GroupBlock -> [String]
 showBlock block = intercalate [""] $ map showGroup sortedGroups
-    where sortedGroups = sort $ groups block
+    where sortedGroups = sort $ _groups block
 
 showListHeader :: TodoList -> [String]
 showListHeader (TodoList (name, date) _) = ["", spaces 4 ++ title, spaces (4 + centOffset) ++ dateString,""]
@@ -84,7 +84,7 @@ showListHeader (TodoList (name, date) _) = ["", spaces 4 ++ title, spaces (4 + c
 -- | Converts a to do list into a string list.
 showTodoList :: TodoList -> [String]
 showTodoList list = showListHeader list ++ intercalate [separator ++ "\n"] (map showBlock sortedBlocks)
-    where sortedBlocks = sort $ blocks list
+    where sortedBlocks = sort $ _blocks list
 
 exItems :: [Item]
 exItems =

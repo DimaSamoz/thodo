@@ -26,7 +26,7 @@ parseItem = do
     tickOrSpace <- anyChar          -- Whether the item is done or not
     count 4 anyChar                 -- Spaces and index
     desc <- manyTill anyChar newline    -- Description of item
-    return Item {itemDesc = desc, itemDone = tickOrSpace /= ' '}
+    return Item {_itemDesc = desc, _itemDone = tickOrSpace /= ' '}
 
 -- Parses a date separator.
 dateSep :: Parsec String () Char
@@ -75,11 +75,11 @@ parseTaskHeader = do
     count 5 anyChar
     (desc, priority, deadline) <- parseTaskDesc
     return Task
-        { desc = desc
-        , items = []
-        , deadline = deadline
-        , priority = priority
-        , done = tickOrSpace /= ' '
+        { _desc = desc
+        , _items = []
+        , _deadline = deadline
+        , _priority = priority
+        , _done = tickOrSpace /= ' '
         }
 
 -- | Parses a task.
@@ -87,9 +87,9 @@ parseTask :: Deadline -> Parsec String () Task
 parseTask relTime = do
     header <- parseTaskHeader
     taskItems <- many $ try parseItem
-    if deadline header == None      -- If the task doesn't have an absolute deadline, set the relative deadline from the group
-        then return header {items = taskItems, deadline = relTime}
-        else return header {items = taskItems}
+    if _deadline header == None      -- If the task doesn't have an absolute deadline, set the relative deadline from the group
+        then return header {_items = taskItems, _deadline = relTime}
+        else return header {_items = taskItems}
 
 tryNoTasks :: Parsec String () Bool
 tryNoTasks = do
@@ -120,14 +120,14 @@ parseGroup = do
             else case category of
                 RelTime rt  -> many $ try (parseTask (Rel rt))
                 Custom _    -> many $ try (parseTask None)
-    return TaskGroup {category = category, tasks = tasks}
+    return TaskGroup {_category = category, _tasks = tasks}
 
 blockSep :: Parsec String () ()
 blockSep = string "____" >> newline >> void newline
 
 -- Converts a group category into a timescale.
 determineTimescale :: TaskGroup -> Timescale
-determineTimescale group = case category group of
+determineTimescale group = case _category group of
     RelTime Today -> Days
     RelTime Tomorrow -> Days
     RelTime ThisWeek -> Weeks
@@ -141,7 +141,7 @@ parseBlock :: Parsec String () GroupBlock
 parseBlock = do
     groups <- parseGroup `sepBy` newline                -- Groups are separated by newlines
     let timescale = determineTimescale (head groups)    -- Timescale is determined from the category of the first group
-    return GroupBlock { scale = timescale, groups = groups }
+    return GroupBlock { _scale = timescale, _groups = groups }
 
 -- Parses the to-do list header
 parseListHeader :: Parsec String () (String, Day)
@@ -159,7 +159,7 @@ parseTodoList :: Parsec String () TodoList
 parseTodoList = do
     header <- parseListHeader
     blocks <- parseBlock `sepBy` blockSep
-    return TodoList {header = header, blocks = blocks}
+    return TodoList {_header = header, _blocks = blocks}
 
 
 -- Examples - to be removed

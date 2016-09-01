@@ -69,37 +69,37 @@ type Description = String
 
 -- | An item in a list task.
 data Item = Item
-    { itemDesc :: Description
-    , itemDone :: Done
+    { _itemDesc :: Description
+    , _itemDone :: Done
     } deriving (Eq, Show)
 
 
 -- | A list task consisting of a description, a list of items (e.g. grocery list), deadline, priority and status.
 -- | The list of items can be empty - in that case, the todo task is the description itself.
 data Task = Task
-    { desc :: Description
-    , items :: [Item]
-    , deadline :: Deadline
-    , priority :: Priority
-    , done :: Done
+    { _desc :: Description
+    , _items :: [Item]
+    , _deadline :: Deadline
+    , _priority :: Priority
+    , _done :: Done
     } deriving (Eq, Show)
 
 instance Ord Task where
-    compare task1 task2 = priority task1 `compare` priority task2
+    compare task1 task2 = _priority task1 `compare` _priority task2
 
 
 -- | A group of tasks, usually by time or category
-data TaskGroup = TaskGroup { category :: Category, tasks :: [Task]} deriving (Eq, Show)
+data TaskGroup = TaskGroup { _category :: Category, _tasks :: [Task]} deriving (Eq, Show)
 
 instance Ord TaskGroup where
-    compare group1 group2 = category group1 `compare` category group2
+    compare group1 group2 = _category group1 `compare` _category group2
 
 
 -- | A block of task groups, usually by timescale
-data GroupBlock = GroupBlock { scale :: Timescale, groups :: [TaskGroup]} deriving (Eq, Show)
+data GroupBlock = GroupBlock { _scale :: Timescale, _groups :: [TaskGroup]} deriving (Eq, Show)
 
 instance Ord GroupBlock where
-    compare block1 block2 = scale block1 `compare` scale block2
+    compare block1 block2 = _scale block1 `compare` _scale block2
 
 -- | An entire to do list with a header containing the name and date, and the list of the blocks in the list.
-data TodoList = TodoList { header :: (String, Day), blocks :: [GroupBlock]} deriving (Eq, Show)
+data TodoList = TodoList { _header :: (String, Day), _blocks :: [GroupBlock]} deriving (Eq, Show)
