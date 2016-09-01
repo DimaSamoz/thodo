@@ -22,7 +22,8 @@ data Command
           }
     | What [Category]
     | Tick [Category]
-    | Clear String deriving (Eq, Show)
+    | Clear String
+    | Init deriving (Eq, Show)
 
 
 parseAdd :: Parser Command
@@ -44,8 +45,9 @@ parseTick = Tick <$> parseTickCategory
 parseClear :: Parser Command
 parseClear = Clear <$> parseClearTarget
 
-withInfo :: Parser a -> String -> ParserInfo a
-withInfo opts desc = info (helper <*> opts) $ progDesc desc
+parseInit :: Parser Command
+parseInit = pure Init
+
 
 parseCommand :: Parser Command
 parseCommand = subparser $
@@ -53,3 +55,9 @@ parseCommand = subparser $
     <> command "what"  (parseWhat `withInfo` "See the tasks from the given categories")
     <> command "tick"  (parseTick `withInfo` "Mark tasks and items as done")
     <> command "clear" (parseClear `withInfo` "Remove tasks from the list")
+    <> command "init"  (parseInit `withInfo` "Initialise a new to-do list")
+
+
+
+withInfo :: Parser a -> String -> ParserInfo a
+withInfo opts desc = info (helper <*> opts) $ progDesc desc
