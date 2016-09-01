@@ -6,6 +6,7 @@ module Printing
     , showBlock
     , showTodoList
     , printStrings
+    , writeToFile
     ) where
 
 import Types
@@ -130,5 +131,10 @@ exList = TodoList ("Dima", fromGregorian 2016 8 23)
     , exBlock2
     ]
 
+-- | Print a todo list in the console.
 printStrings :: [String] -> IO ()
 printStrings = mapM_ putStrLn
+
+-- | Write the to-do list into a file.
+writeToFile :: FilePath -> TodoList -> IO ()
+writeToFile fileName = writeFile fileName . unlines . showTodoList
