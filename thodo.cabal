@@ -20,6 +20,7 @@ library
                      , Commands.Common
   other-modules:       Printing
                      , Parsing
+                     , Util
                      , Commands.Add
                      , Commands.What
                      , Commands.Tick

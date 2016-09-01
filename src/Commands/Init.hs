@@ -5,6 +5,7 @@ module Commands.Init
 
 import Types
 import Printing
+import Util
 import Commands.Common
 import Options.Applicative
 import System.FilePath

@@ -7,14 +7,14 @@ module Parsing
     , parseTodoList
     ) where
 
-import           Control.Applicative hiding (many, optional, (<|>))
-import           Control.Monad       (void)
-import           Data.List           (isInfixOf)
-import           Data.Time           (Day, UTCTime, defaultTimeLocale,
-                                      parseTimeOrError)
-import           Text.Parsec
-import           Text.Show.Pretty
-import           Types
+import Types
+import Util
+import Control.Applicative hiding (many, optional, (<|>))
+import Control.Monad (void)
+import Data.List (isInfixOf)
+import Data.Time (Day, UTCTime, defaultTimeLocale, parseTimeOrError)
+import Text.Parsec
+import Text.Show.Pretty
 
 parse' :: Parsec String () c -> String -> Either ParseError c
 parse' rule = parse rule "Parsing.hs"
@@ -125,22 +125,11 @@ parseGroup = do
 blockSep :: Parsec String () ()
 blockSep = string "____" >> newline >> void newline
 
--- Converts a group category into a timescale.
-determineTimescale :: TaskGroup -> Timescale
-determineTimescale group = case _category group of
-    RelTime Today -> Days
-    RelTime Tomorrow -> Days
-    RelTime ThisWeek -> Weeks
-    RelTime NextWeek -> Weeks
-    RelTime ThisMonth -> Months
-    RelTime NextMonth -> Months
-    Custom _ -> Other
-
 -- | Parses a group block.
 parseBlock :: Parsec String () GroupBlock
 parseBlock = do
     groups <- parseGroup `sepBy` newline                -- Groups are separated by newlines
-    let timescale = determineTimescale (head groups)    -- Timescale is determined from the category of the first group
+    let timescale = categoryToTimescale (_category $ head groups)    -- Timescale is determined from the category of the first group
     return GroupBlock { _scale = timescale, _groups = groups }
 
 -- Parses the to-do list header
