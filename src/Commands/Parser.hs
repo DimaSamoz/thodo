@@ -8,10 +8,21 @@ import Types
 import Data.Time hiding (parseTime)
 import Commands.Add
 import Commands.What
+import Commands.Tick
+import Commands.Clear
 
 data Command
-    = Add TodoTask Category Priority AddItems (Maybe DayOfWeek) (Maybe Day) (Maybe TimeOfDay)
-    | What [Category] deriving (Eq, Show)
+    = Add { addTask :: TodoTask
+          , addCat :: Category
+          , addPri :: Priority
+          , addItems :: AddItems
+          , addDOW :: Maybe DayOfWeek
+          , addDate :: Maybe Day
+          , addTime :: Maybe TimeOfDay
+          }
+    | What [Category]
+    | Tick [Category]
+    | Clear String deriving (Eq, Show)
 
 
 parseAdd :: Parser Command
@@ -25,13 +36,20 @@ parseAdd = Add
     <*> parseTime
 
 parseWhat :: Parser Command
-parseWhat = What
-    <$> parseWhatCategory
+parseWhat = What <$> parseWhatCategory
+
+parseTick :: Parser Command
+parseTick = Tick <$> parseTickCategory
+
+parseClear :: Parser Command
+parseClear = Clear <$> parseClearTarget
 
 withInfo :: Parser a -> String -> ParserInfo a
 withInfo opts desc = info (helper <*> opts) $ progDesc desc
 
 parseCommand :: Parser Command
 parseCommand = subparser $
-       command "add"   (parseAdd   `withInfo` "Add a new TODO-TASK to the list")
+       command "add"   (parseAdd  `withInfo` "Add a new TODO-TASK to the list")
     <> command "what"  (parseWhat `withInfo` "See the tasks from the given categories")
+    <> command "tick"  (parseTick `withInfo` "Mark tasks and items as done")
+    <> command "clear" (parseClear `withInfo` "Remove tasks from the list")
