@@ -1,6 +1,5 @@
 module Commands.Parser
-    ( Command (..)
-    , parseCommand
+    ( parseCommand
     ) where
 
 import Options.Applicative
@@ -10,20 +9,7 @@ import Commands.Add
 import Commands.What
 import Commands.Tick
 import Commands.Clear
-
-data Command
-    = Add { addTask :: TodoTask
-          , addCat :: Category
-          , addPri :: Priority
-          , addItems :: AddItems
-          , addDOW :: Maybe DayOfWeek
-          , addDate :: Maybe Day
-          , addTime :: Maybe TimeOfDay
-          }
-    | What [Category]
-    | Tick [Category]
-    | Clear String
-    | Init deriving (Eq, Show)
+import Commands.Common
 
 
 parseAdd :: Parser Command
@@ -56,6 +42,10 @@ parseCommand = subparser $
     <> command "tick"  (parseTick `withInfo` "Mark tasks and items as done")
     <> command "clear" (parseClear `withInfo` "Remove tasks from the list")
     <> command "init"  (parseInit `withInfo` "Initialise a new to-do list")
+
+
+-- handleCommand :: Command -> IO ()
+-- handleCommand
 
 
 

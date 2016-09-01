@@ -17,14 +17,6 @@ import Commands.Common
 import Options.Applicative
 import Data.Time hiding (parseTime)
 
--- | The string describing the task.
-type TodoTask = String
-
--- | Whether to add items to the task.
-type AddItems = Bool
-
--- | The days of the week.
-data DayOfWeek = Mon | Tue | Wed | Thu | Fri | Sat | Sun deriving (Eq, Show, Read)
 
 -- | Parses a task description.
 parseTask :: Parser TodoTask

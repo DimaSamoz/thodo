@@ -6,10 +6,39 @@ module Commands.Common
     , thisMonth
     , nextMonth
     , customCategory
+    , TodoTask
+    , AddItems
+    , DayOfWeek
+    , Command (..)
     ) where
 
 import Types
+import Data.Time (Day, TimeOfDay)
 import Options.Applicative
+
+data Command
+    = Add { addTask :: TodoTask
+          , addCat :: Category
+          , addPri :: Priority
+          , addItems :: AddItems
+          , addDOW :: Maybe DayOfWeek
+          , addDate :: Maybe Day
+          , addTime :: Maybe TimeOfDay
+          }
+    | What [Category]
+    | Tick [Category]
+    | Clear String
+    | Init deriving (Eq, Show)
+
+-- | The string describing the task.
+type TodoTask = String
+
+-- | Whether to add items to the task.
+type AddItems = Bool
+
+-- | The days of the week.
+data DayOfWeek = Mon | Tue | Wed | Thu | Fri | Sat | Sun deriving (Eq, Show, Read)
+
 
 -- Category parsers
 
