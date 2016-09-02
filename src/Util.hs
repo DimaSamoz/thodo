@@ -3,6 +3,7 @@ module Util
     ( initTodoList
     , categoryToTimescale
     , deadlineToCategory
+    , replaceInList
     ) where
 
 import Types
@@ -71,3 +72,8 @@ timeToCategory currentT otherT =
     if otherT < currentT
         then RelTime Overdue    -- Need to take into account the time of day, so compare this first
         else dateToCategory (utctDay currentT) (utctDay otherT)
+
+-- | Finds the first element matching a predicate in a list with another element.
+replaceInList :: (a -> Bool) -> [a] -> a -> [a]
+replaceInList _ [] _ = []
+replaceInList p (x:xs) e  = if p x then e:xs else x : replaceInList p xs e
