@@ -1,6 +1,7 @@
 -- | Module containing utility functions, conversion, etc.
 module Util
     ( initTodoList
+    , prompt
     , categoryToTimescale
     , deadlineToCategory
     , replaceInList
@@ -9,6 +10,7 @@ module Util
 import Types
 import Data.Time
 import Data.Time.Calendar.OrdinalDate (mondayStartWeek)
+import System.Console.Haskeline
 
 -- | Creates a new, empty todo list with the given name and date.
 initTodoList :: String -> Day -> TodoList
@@ -28,6 +30,17 @@ initTodoList name date =
             ]
         , GroupBlock Other []
         ]
+
+-- | Prints a prompt message and returns the user's response.
+prompt :: String -> IO String
+prompt message = runInputT defaultSettings loop
+    where
+    loop :: InputT IO String
+    loop = do
+        line    <- getInputLine message
+        case line of
+            Just str -> return str
+            Nothing -> return ""
 
 -- | Converts a group category into a timescale.
 categoryToTimescale :: Category -> Timescale

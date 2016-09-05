@@ -35,6 +35,7 @@ library
                      , filepath
                      , directory
                      , lens
+                     , haskeline
                      , pretty-show
 
 executable thodo
