@@ -23,6 +23,7 @@ library
                      , Util
                      , TodoLenses
                      , Commands.Add.Parser
+                     , Commands.Add.Handler
                      , Commands.What.Parser
                      , Commands.Tick.Parser
                      , Commands.Clear.Parser
