@@ -16,24 +16,7 @@ import Options.Applicative
 import Data.Time hiding (parseTime)
 import Data.Time.Calendar.OrdinalDate
 import Control.Exception
-import Text.Parsec.Error
 import System.Directory
-
-
--- | Exception representing a problem with the deadline date.
-data DateTimeException = PastDate | AmbiguousDay deriving Eq
-
-instance Exception DateTimeException
-instance Show DateTimeException where
-    show PastDate = "This day is in the past."
-    show AmbiguousDay = "Ambiguous day of week – use absolute dates instead."
-
--- | Exception representing a problem with the parsing of the to-do list.
-data ParseException = ParseException Text.Parsec.Error.ParseError
-
-instance Exception ParseException
-instance Show ParseException where
-    show (ParseException str) = "To-do list file corrupted: " ++ show str
 
 -- | Handler for the 'add' command.
 handleAddCommand :: Command -> IO ()

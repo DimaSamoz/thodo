@@ -10,11 +10,15 @@ module Commands.Common
     , AddItems
     , DayOfWeek (..)
     , Command (..)
+    , DateTimeException (..)
+    , ParseException (..)
     ) where
 
 import Types
 import Data.Time (Day, TimeOfDay)
 import Options.Applicative
+import Control.Exception
+import Text.Parsec.Error
 
 data Command
     = Add { addTodoTask :: TodoTask
@@ -39,9 +43,23 @@ type AddItems = Bool
 -- | The days of the week.
 data DayOfWeek = Mon | Tue | Wed | Thu | Fri | Sat | Sun deriving (Eq, Show, Read, Enum)
 
+-- | Exception representing a problem with the deadline date.
+data DateTimeException = PastDate | AmbiguousDay deriving Eq
+
+instance Exception DateTimeException
+instance Show DateTimeException where
+    show PastDate = "This day is in the past."
+    show AmbiguousDay = "Ambiguous day of week – use absolute dates instead."
+
+-- | Exception representing a problem with the parsing of the to-do list.
+data ParseException = ParseException Text.Parsec.Error.ParseError
+
+instance Exception ParseException
+instance Show ParseException where
+    show (ParseException str) = "To-do list file corrupted: " ++ show str
+
 
 -- Category parsers
-
 today :: Parser Category
 today = flag' (RelTime Today)
      ( long "today"
