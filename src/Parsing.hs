@@ -1,6 +1,7 @@
 -- | Functions to parse to-do list components from strings.
 module Parsing
-    ( parseItem
+    ( parseWith
+    , parseItem
     , parseTask
     , parseGroup
     , parseBlock
@@ -16,8 +17,8 @@ import Data.Time (Day, UTCTime, defaultTimeLocale, parseTimeOrError)
 import Text.Parsec
 import Text.Show.Pretty
 
-parse' :: Parsec String () c -> String -> Either ParseError c
-parse' rule = parse rule "Parsing.hs"
+parseWith :: Parsec String () c -> String -> Either ParseError c
+parseWith rule = parse rule "Parsing.hs"
 
 -- | Parses an item.
 parseItem :: Parsec String () Item
@@ -165,6 +166,6 @@ task = "\n    Dima's To Do List\n       17 Sep 2016\n\n"
     ++ "WISHLIST\n    1.  Movies to watch  \n        a) Deadpool\n      ✔ b) Suicide Squad\n"
 
 
-t = parse' parseTodoList task
+t = parseWith parseTodoList task
 
 nice a = putStrLn $ ppShow a
