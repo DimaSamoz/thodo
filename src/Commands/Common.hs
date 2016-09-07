@@ -8,7 +8,7 @@ module Commands.Common
     , customCategory
     , TodoTask
     , AddItems
-    , DayOfWeek
+    , DayOfWeek (..)
     , Command (..)
     ) where
 
@@ -17,7 +17,7 @@ import Data.Time (Day, TimeOfDay)
 import Options.Applicative
 
 data Command
-    = Add { addTask :: TodoTask
+    = Add { addTodoTask :: TodoTask
           , addCat :: Category
           , addPri :: Priority
           , addItems :: AddItems
@@ -37,7 +37,7 @@ type TodoTask = String
 type AddItems = Bool
 
 -- | The days of the week.
-data DayOfWeek = Mon | Tue | Wed | Thu | Fri | Sat | Sun deriving (Eq, Show, Read)
+data DayOfWeek = Mon | Tue | Wed | Thu | Fri | Sat | Sun deriving (Eq, Show, Read, Enum)
 
 
 -- Category parsers
