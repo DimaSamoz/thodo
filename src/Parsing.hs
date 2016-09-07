@@ -129,8 +129,10 @@ blockSep = string "____" >> newline >> void newline
 -- | Parses a group block.
 parseBlock :: Parsec String () GroupBlock
 parseBlock = do
-    groups <- parseGroup `sepBy` newline                -- Groups are separated by newlines
-    let timescale = categoryToTimescale (_category $ head groups)    -- Timescale is determined from the category of the first group
+    groups <- parseGroup `sepBy` newline                    -- Groups are separated by newlines
+    let timescale = case groups of
+                (g:_) -> categoryToTimescale (_category g)  -- Timescale is determined from the category of the first group
+                [] -> Other
     return GroupBlock { _scale = timescale, _groups = groups }
 
 -- Parses the to-do list header
