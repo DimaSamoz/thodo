@@ -49,7 +49,7 @@ parseCommand = subparser $
 
 handleCommand :: Command -> IO ()
 handleCommand Init = handleInitCommand
-handleCommand a@Add {} = print a >> handleAddCommand a
+handleCommand a@Add {} = handleAddCommand a
 
 
 withInfo :: Parser a -> String -> ParserInfo a
