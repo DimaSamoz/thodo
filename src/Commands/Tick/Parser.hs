@@ -1,6 +1,6 @@
--- | Subparsers for the 'what' command.
-module Commands.What
-    ( parseWhatCategory
+-- | Subparsers for the 'tick' command.
+module Commands.Tick.Parser
+    ( parseTickCategory
     ) where
 
 import Types
@@ -14,8 +14,8 @@ still = flag' (RelTime Overdue)
     <> help "Overdue tasks")
 
 -- | Parses the category of the task.
-parseWhatCategory :: Parser [Category]
-parseWhatCategory =
+parseTickCategory :: Parser [Category]
+parseTickCategory =
     some  ( today
         <|> tomorrow
         <|> thisWeek

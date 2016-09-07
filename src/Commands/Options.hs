@@ -1,4 +1,4 @@
-module Commands.Parser
+module Commands.Options
     ( parseCommand
     , handleCommand
     ) where
@@ -6,17 +6,18 @@ module Commands.Parser
 import Options.Applicative
 import Types
 import Data.Time hiding (parseTime)
-import Commands.Add
-import Commands.What
-import Commands.Tick
-import Commands.Clear
-import Commands.Init
+import Commands.Add.Parser
+import Commands.Add.Handler
+import Commands.What.Parser
+import Commands.Tick.Parser
+import Commands.Clear.Parser
+import Commands.Init.Handler
 import Commands.Common
 
 
 parseAdd :: Parser Command
 parseAdd = Add
-    <$> parseTask
+    <$> parseTodoTask
     <*> parseAddCategory
     <*> parsePriority
     <*> parseAddItems
@@ -48,6 +49,7 @@ parseCommand = subparser $
 
 handleCommand :: Command -> IO ()
 handleCommand Init = handleInitCommand
+handleCommand a@Add {} = print a >> handleAddCommand a
 
 
 withInfo :: Parser a -> String -> ParserInfo a

@@ -1,5 +1,5 @@
--- | Subparsers for the 'init' command.
-module Commands.Init
+-- | Handler for the 'init' command.
+module Commands.Init.Handler
     ( handleInitCommand
     ) where
 

@@ -1,7 +1,7 @@
 module Main where
 
 import Types
-import Commands.Parser
+import Commands.Options
 import Commands.Common
 import Options.Applicative
 

@@ -1,15 +1,12 @@
 -- | Subparsers for the 'add' command.
-module Commands.Add
-    ( parseTask
+module Commands.Add.Parser
+    ( parseTodoTask
     , parseAddCategory
     , parsePriority
     , parseAddItems
     , parseDayOfWeek
     , parseDate
     , parseTime
-    , TodoTask
-    , AddItems
-    , DayOfWeek
     ) where
 
 import Types
@@ -19,8 +16,8 @@ import Data.Time hiding (parseTime)
 
 
 -- | Parses a task description.
-parseTask :: Parser TodoTask
-parseTask = strArgument (metavar "TODO-TASK")
+parseTodoTask :: Parser TodoTask
+parseTodoTask = strArgument (metavar "TODO-TASK")
 
 -- | Parses the category of the task.
 parseAddCategory :: Parser Category
@@ -43,7 +40,6 @@ parseAddItems = switch
     <> help "Add items to the task" )
 
 -- Priority parsers
-
 high :: Parser Priority
 high = flag' High
      ( long "high"

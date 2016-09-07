@@ -1,5 +1,5 @@
 -- | Subparsers for the 'clear' command.
-module Commands.Clear
+module Commands.Clear.Parser
     ( parseClearTarget
     ) where
 
