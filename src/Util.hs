@@ -46,6 +46,7 @@ prompt message = runInputT defaultSettings loop
 categoryToTimescale :: Category -> Timescale
 categoryToTimescale (RelTime Today) = Days
 categoryToTimescale (RelTime Tomorrow) = Days
+categoryToTimescale (RelTime Overdue) = Days    -- We want overdue items to show up at the top
 categoryToTimescale (RelTime ThisWeek) = Weeks
 categoryToTimescale (RelTime NextWeek) = Weeks
 categoryToTimescale (RelTime ThisMonth) = Months
