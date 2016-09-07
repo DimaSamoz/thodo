@@ -43,8 +43,8 @@ showPriority Normal = "  "
 showPriority High   = "!  "
 
 showAbsDeadline :: Deadline -> String
-showAbsDeadline (Abs (Date d)) = " – " ++ formatTime defaultTimeLocale "%A %e %b %G" d
-showAbsDeadline (Abs (Time t)) = " – " ++ formatTime defaultTimeLocale "%R, %A %e %b %G" t
+showAbsDeadline (Abs (Date d)) = "- " ++ formatTime defaultTimeLocale "%A %e %b %G" d
+showAbsDeadline (Abs (Time t)) = "- " ++ formatTime defaultTimeLocale "%R, %A %e %b %G" t
 showAbsDeadline _ = ""
 
 showTaskHeader :: Int -> Task -> String
