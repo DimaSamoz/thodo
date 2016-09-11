@@ -30,7 +30,7 @@ data Command
           , addTime :: Maybe TimeOfDay
           }
     | What [Category]
-    | Tick [Category]
+    | Tick Category
     | Clear String
     | Init deriving (Eq, Show)
 

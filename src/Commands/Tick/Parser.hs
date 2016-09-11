@@ -14,14 +14,14 @@ still = flag' (RelTime Overdue)
     <> help "Overdue tasks")
 
 -- | Parses the category of the task.
-parseTickCategory :: Parser [Category]
+parseTickCategory :: Parser Category
 parseTickCategory =
-    some  ( today
-        <|> tomorrow
-        <|> thisWeek
-        <|> nextWeek
-        <|> thisMonth
-        <|> nextMonth
-        <|> customCategory
-        <|> still )
-    <|> pure [RelTime Today, RelTime Tomorrow]
+      ( today
+    <|> tomorrow
+    <|> thisWeek
+    <|> nextWeek
+    <|> thisMonth
+    <|> nextMonth
+    <|> customCategory
+    <|> still )
+    <|> pure (RelTime Today)
