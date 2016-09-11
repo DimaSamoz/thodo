@@ -5,12 +5,15 @@ module Util
     , categoryToTimescale
     , deadlineToCategory
     , replaceInList
+    , updateTodoList
     ) where
 
 import Types
+import Printing
 import Data.Time
 import Data.Time.Calendar.OrdinalDate (mondayStartWeek)
 import System.Console.Haskeline
+import System.Directory
 
 -- | Creates a new, empty todo list with the given name and date.
 initTodoList :: String -> Day -> TodoList
@@ -91,3 +94,7 @@ timeToCategory currentT otherT =
 replaceInList :: (a -> Bool) -> [a] -> a -> [a]
 replaceInList _ [] _ = error "Category is empty or doesn't exist."
 replaceInList p (x:xs) e  = if p x then e:xs else x : replaceInList p xs e
+
+-- | Updates the to-do list in the default file after making a recovery copy of the old one.
+updateTodoList :: TodoList -> IO ()
+updateTodoList new = renameFile "todo/list.txt" "todo/old_list.txt" >> writeToFile "todo/list.txt" new

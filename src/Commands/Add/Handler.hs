@@ -16,7 +16,6 @@ import Options.Applicative
 import Data.Time hiding (parseTime)
 import Data.Time.Calendar.OrdinalDate
 import Control.Exception
-import System.Directory
 
 -- | Handler for the 'add' command.
 handleAddCommand :: Command -> IO ()
@@ -25,12 +24,11 @@ handleAddCommand (Add task cat pri addItems dowM dateM timeM) = do
         then putStrLn "Type in the items one by one, then press Enter twice when done:" >> askItems 'a'
         else return []
     newTask <- constructTask (task, items, cat, dowM, dateM, timeM, pri)
-    todoList <- parseWith parseTodoList <$> readFile "todo/list.txt"
-    case todoList of
+    oldList <- parseWith parseTodoList <$> readFile "todo/list.txt"
+    case oldList of
         Right list -> do
-            removeFile "todo/list.txt"      -- Old is removed to avoid race conditions.
-            newList <- addTask list newTask
-            writeToFile "todo/list.txt" newList
+            newList <- addTask list newTask cat
+            updateTodoList newList
         Left e -> throwIO (ParseException e)
 
 -- Ask for the list of items belonging to the task.
