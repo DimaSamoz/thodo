@@ -24,4 +24,4 @@ parseWhatCategory =
         <|> nextMonth
         <|> customCategory
         <|> still )
-    <|> pure [RelTime Today, RelTime Tomorrow]
+    <|> pure [RelTime Today, RelTime Tomorrow, RelTime Overdue]
