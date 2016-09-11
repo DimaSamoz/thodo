@@ -22,6 +22,7 @@ initTodoList name date =
         [ GroupBlock Days
             [ TaskGroup (RelTime Today) []
             , TaskGroup (RelTime Tomorrow) []
+            , TaskGroup (RelTime Overdue) []
             ]
         , GroupBlock Weeks
             [ TaskGroup (RelTime ThisWeek) []
