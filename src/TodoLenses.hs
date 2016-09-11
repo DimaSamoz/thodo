@@ -4,6 +4,8 @@
 module TodoLenses
     ( addTask
     , getGroupByCategory
+    , tickTask
+    , tickItem
     ) where
 
 import Types
@@ -32,17 +34,40 @@ getGroupByCategory :: TodoList -> Category -> TaskGroup
 getGroupByCategory list cat =
     list^.blocks.findBy scale (categoryToTimescale cat).groups.findBy category cat
 
+tickTask :: TodoList -> Category -> Int -> TodoList
+tickTask list cat taskIx =
+    list
+        & blocks
+        . findBy scale (categoryToTimescale cat)
+        . groups
+        . findBy category cat
+        . tasks
+        . element taskIx
+        . done .~ True
+
+tickItem :: TodoList -> Category -> Int -> Int -> TodoList
+tickItem list cat taskIx itemIx =
+    list
+        & blocks
+        . findBy scale (categoryToTimescale cat)
+        . groups
+        . findBy category cat
+        . tasks
+        . element taskIx
+        . items
+        . element itemIx
+        . itemDone .~ True
+
+
 -- | Lens that finds an element in a list that matches another based on the specified label.
 findBy :: Eq a => Getting a s a -> a -> Lens' [s] s
 findBy label ts = lens get set
     where get = customHead . filter (\b -> b^.label == ts)
           set = replaceInList (\b -> b^.label == ts)
-
--- Head function with a custom error message - a bit smelly but errors are handled by optparse-applicative
--- so this is not much different from an exception.
-customHead :: [a] -> a
-customHead [] = error "Category is empty or doesn't exist."
-customHead l = head l
+          -- Head function with a custom error message - a bit smelly but errors are handled by optparse-applicative
+          -- so this is not much different from an exception.
+          customHead [] = error "Category is empty or doesn't exist."
+          customHead l = head l
 
 exItems :: [Item]
 exItems =

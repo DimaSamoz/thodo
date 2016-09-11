@@ -11,6 +11,7 @@ import Commands.Add.Handler
 import Commands.What.Parser
 import Commands.What.Handler
 import Commands.Tick.Parser
+import Commands.Tick.Handler
 import Commands.Clear.Parser
 import Commands.Init.Handler
 import Commands.Common
@@ -52,6 +53,7 @@ handleCommand :: Command -> IO ()
 handleCommand Init = handleInitCommand
 handleCommand a@Add {} = handleAddCommand a
 handleCommand w@What {} = handleWhatCommand w
+handleCommand t@Tick {} = handleTickCommand t
 
 
 withInfo :: Parser a -> String -> ParserInfo a
