@@ -1,8 +1,9 @@
 {-# LANGUAGE TemplateHaskell, Rank2Types #-}
 
--- Functions utilising lenses into the to-do lists.
+-- | Functions utilising lenses into the to-do lists.
 module TodoLenses
     ( addTask
+    , getGroupByCategory
     ) where
 
 import Types
@@ -25,6 +26,11 @@ addTask list task cat =
         . groups
         . findBy category cat
         . tasks %~ (task :)
+
+-- | Returns a task group given its category.
+getGroupByCategory :: TodoList -> Category -> TaskGroup
+getGroupByCategory list cat =
+    list^.blocks.findBy scale (categoryToTimescale cat).groups.findBy category cat
 
 -- | Lens that finds an element in a list that matches another based on the specified label.
 findBy :: Eq a => Getting a s a -> a -> Lens' [s] s

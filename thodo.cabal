@@ -25,6 +25,7 @@ library
                      , Commands.Add.Parser
                      , Commands.Add.Handler
                      , Commands.What.Parser
+                     , Commands.What.Handler
                      , Commands.Tick.Parser
                      , Commands.Clear.Parser
                      , Commands.Init.Handler

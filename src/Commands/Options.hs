@@ -9,6 +9,7 @@ import Data.Time hiding (parseTime)
 import Commands.Add.Parser
 import Commands.Add.Handler
 import Commands.What.Parser
+import Commands.What.Handler
 import Commands.Tick.Parser
 import Commands.Clear.Parser
 import Commands.Init.Handler
@@ -50,6 +51,7 @@ parseCommand = subparser $
 handleCommand :: Command -> IO ()
 handleCommand Init = handleInitCommand
 handleCommand a@Add {} = handleAddCommand a
+handleCommand w@What {} = handleWhatCommand w
 
 
 withInfo :: Parser a -> String -> ParserInfo a
