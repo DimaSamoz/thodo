@@ -89,5 +89,5 @@ timeToCategory currentT otherT =
 
 -- | Finds the first element matching a predicate in a list with another element.
 replaceInList :: (a -> Bool) -> [a] -> a -> [a]
-replaceInList _ [] _ = []
+replaceInList _ [] _ = error "Category is empty or doesn't exist."
 replaceInList p (x:xs) e  = if p x then e:xs else x : replaceInList p xs e

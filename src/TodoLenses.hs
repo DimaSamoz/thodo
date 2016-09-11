@@ -16,22 +16,27 @@ makeLenses ''TaskGroup
 makeLenses ''GroupBlock
 makeLenses ''TodoList
 
--- Inserts a task into the correct block and group of the to-do list.
-addTask :: TodoList -> Task -> IO TodoList
-addTask list task = do
-    taskCategory <- task^.deadline.to deadlineToCategory
+-- | Inserts a task into the correct block and group of the to-do list.
+addTask :: TodoList -> Task -> Category -> IO TodoList
+addTask list task cat =
     return $ list
         & blocks
-        . findBy scale (categoryToTimescale taskCategory)
+        . findBy scale (categoryToTimescale cat)
         . groups
-        . findBy category taskCategory
+        . findBy category cat
         . tasks %~ (task :)
 
 -- | Lens that finds an element in a list that matches another based on the specified label.
 findBy :: Eq a => Getting a s a -> a -> Lens' [s] s
 findBy label ts = lens get set
-    where get = head . filter (\b -> b^.label == ts)
+    where get = customHead . filter (\b -> b^.label == ts)
           set = replaceInList (\b -> b^.label == ts)
+
+-- Head function with a custom error message - a bit smelly but errors are handled by optparse-applicative
+-- so this is not much different from an exception.
+customHead :: [a] -> a
+customHead [] = error "Category is empty or doesn't exist."
+customHead l = head l
 
 exItems :: [Item]
 exItems =
