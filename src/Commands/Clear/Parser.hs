@@ -4,21 +4,22 @@ module Commands.Clear.Parser
     ) where
 
 import Types
+import Commands.Common
 import Options.Applicative
 
-ticked :: Parser String
-ticked = flag' "ticked"
+ticked :: Parser ClearTarget
+ticked = flag' Ticked
      ( long "ticked"
     <> short 't'
     <> help "Clear ticked tasks")
 
-allTasks :: Parser String
-allTasks = flag' "all"
+allTasks :: Parser ClearTarget
+allTasks = flag' All
      ( long "all"
     <> short 'A'
     <> help "Clear all tasks")
 
 
 -- | Parses the category of the task.
-parseClearTarget :: Parser String
+parseClearTarget :: Parser ClearTarget
 parseClearTarget = ticked <|> allTasks

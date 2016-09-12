@@ -9,6 +9,7 @@ module Commands.Common
     , TodoTask
     , AddItems
     , DayOfWeek (..)
+    , ClearTarget (..)
     , Command (..)
     , DateTimeException (..)
     , ParseException (..)
@@ -31,7 +32,7 @@ data Command
           }
     | What [Category]
     | Tick Category
-    | Clear String
+    | Clear ClearTarget
     | Init deriving (Eq, Show)
 
 -- | The string describing the task.
@@ -42,6 +43,9 @@ type AddItems = Bool
 
 -- | The days of the week.
 data DayOfWeek = Mon | Tue | Wed | Thu | Fri | Sat | Sun deriving (Eq, Show, Read, Enum)
+
+-- | The tasks to clear.
+data ClearTarget = Ticked | All deriving (Eq, Show)
 
 -- | Exception representing a problem with the deadline date.
 data DateTimeException = PastDate | AmbiguousDay deriving Eq
