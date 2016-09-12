@@ -9,7 +9,6 @@ import Parsing
 import TodoLenses
 import Commands.What.Handler
 import Commands.Common
-import Options.Applicative
 import Text.Read (readMaybe)
 import Data.Char (ord)
 import Control.Monad (unless)
