@@ -6,12 +6,15 @@ module TodoLenses
     , getGroupByCategory
     , tickTask
     , tickItem
+    , clearTicked
+    , clearAll
     ) where
 
 import Types
 import Util
 import Data.Time
 import Control.Lens
+import Data.List ((\\))
 
 makeLenses ''Item
 makeLenses ''Task
@@ -58,6 +61,20 @@ tickItem list cat taskIx itemIx =
         . element itemIx
         . itemDone .~ True
 
+-- | Clear ticked tasks from the list.
+clearTicked :: TodoList -> ([Task], TodoList)
+clearTicked = clearBy (^.done)
+
+-- | Clear all tasks from the list.
+clearAll :: TodoList -> TodoList
+clearAll = snd . clearBy (const True)
+
+-- Remove the task matching a given predicate from the to-do list.
+clearBy :: (Task -> Bool) -> TodoList -> ([Task], TodoList)
+clearBy prop list = (tickedTasks, newList)
+    where tickedTasks =
+            list ^.. blocks.traverse.groups.traverse.tasks.traverse.filtered prop
+          newList = list & blocks.traverse.groups.traverse.tasks %~ (\\ tickedTasks)
 
 -- | Lens that finds an element in a list that matches another based on the specified label.
 findBy :: Eq a => Getting a s a -> a -> Lens' [s] s
